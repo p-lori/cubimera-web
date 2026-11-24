@@ -1,5 +1,7 @@
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import { Apple, Moon, Sun } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
+import { useTheme } from "../lib/theme";
 
 /* Scroll-reveal wrapper: finom emelkedés + fade, egyszer fut le */
 export function Reveal({
@@ -83,6 +85,57 @@ export function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
       {val}
       {suffix}
     </span>
+  );
+}
+
+/* Világos/sötét mód kapcsoló — megosztott állapoton, bárhova kitehető */
+export function ThemeToggle({ className = "" }: { className?: string }) {
+  const { theme, toggle } = useTheme();
+  const dark = theme === "dark";
+
+  return (
+    <button
+      onClick={toggle}
+      aria-label={dark ? "Világos mód" : "Sötét mód"}
+      title={dark ? "Világos mód" : "Sötét mód"}
+      className={`relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border transition-colors duration-300 ${
+        dark
+          ? "border-white/15 bg-white/5 text-amber-200 hover:border-amber-200/50"
+          : "border-black/15 bg-black/5 text-slate-600 hover:border-slate-500/50"
+      } ${className}`}
+    >
+      <motion.span
+        key={theme}
+        initial={{ y: 14, opacity: 0, rotate: -60 }}
+        animate={{ y: 0, opacity: 1, rotate: 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="grid place-items-center"
+      >
+        {dark ? <Sun size={18} /> : <Moon size={18} />}
+      </motion.span>
+    </button>
+  );
+}
+
+/* Hivatalos stílusú App Store letöltőgomb */
+export function StoreBadge({ href = "#top" }: { href?: string }) {
+  return (
+    <Magnetic>
+      <a
+        href={href}
+        className="flex items-center gap-3 rounded-2xl border border-white/25 bg-black px-5 py-2.5 transition-shadow duration-300 hover:shadow-[0_0_40px_rgba(34,211,238,0.45)]"
+      >
+        <Apple size={30} className="shrink-0 text-white" fill="currentColor" />
+        <span className="text-left leading-tight">
+          <span className="block text-[10px] font-medium tracking-wide text-white/75">
+            Download on the
+          </span>
+          <span className="font-display block text-[22px] font-semibold leading-none text-white">
+            App Store
+          </span>
+        </span>
+      </a>
+    </Magnetic>
   );
 }
 

@@ -178,8 +178,8 @@ export default function SolidViewer({ id, vals }: { id: SolidId; vals: number[] 
   return (
     <div className="relative">
       <div ref={mountRef} className="h-64 w-full cursor-grab active:cursor-grabbing md:h-72" />
-      <p className="pointer-events-none absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/10 bg-black/50 px-3 py-1 text-[11px] text-white/50 backdrop-blur">
-        <Rotate3d size={13} className="text-cyan-300" />
+      <p className="pointer-events-none absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[11px] text-black/60 dark:border-white/10 dark:bg-black/50 dark:text-white/50 backdrop-blur">
+        <Rotate3d size={13} className="text-cyan-700 dark:text-cyan-300" />
         húzd a forgatáshoz
       </p>
     </div>

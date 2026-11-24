@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Apple, ArrowDown, ScanLine } from "lucide-react";
+import { ArrowDown, ScanLine } from "lucide-react";
 import { useRef } from "react";
-import { CursorGlow, Magnetic } from "./ui";
+import { CursorGlow, Magnetic, StoreBadge } from "./ui";
 
 /* Forgó drótváz-kocka — az app logójának nagy testvére */
 export function WireCube({ size = 220 }: { size?: number }) {
@@ -65,7 +65,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease }}
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/8 px-4 py-1.5 text-xs font-medium tracking-widest text-cyan-200 uppercase"
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-cyan-600/30 bg-cyan-600/10 px-4 py-1.5 text-xs font-medium tracking-widest text-cyan-800 uppercase dark:border-cyan-300/30 dark:bg-cyan-300/10 dark:text-cyan-200"
         >
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-300" />
           Cubimera · iOS · AR + fotó
@@ -99,12 +99,14 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease, delay: 0.45 }}
-            className="max-w-md text-base leading-relaxed text-white/60 md:text-lg"
+            className="max-w-md text-base leading-relaxed text-black/60 md:text-lg dark:text-white/60"
           >
             Lefotózod. Körbeszkenneled. A Cubimera felismeri a testet, és
             megadja a{" "}
-            <span className="text-white">térfogatot és a felszínt</span> —
-            ellenőrzött számokkal, 11 testcsaládra.
+            <span className="text-black dark:text-white">
+              térfogatot és a felszínt
+            </span>{" "}
+            — ellenőrzött számokkal, 11 testcsaládra.
           </motion.p>
 
           <motion.div
@@ -113,21 +115,13 @@ export default function Hero() {
             transition={{ duration: 0.9, ease, delay: 0.55 }}
             className="flex flex-wrap items-center gap-4"
           >
-            <Magnetic>
-              <a
-                href="#app"
-                className="group flex items-center gap-2.5 rounded-full bg-cyan-300 px-7 py-4 text-sm font-bold text-black transition-shadow duration-300 hover:shadow-[0_0_50px_rgba(34,211,238,0.6)]"
-              >
-                <Apple size={18} />
-                Letöltöm iOS-re
-              </a>
-            </Magnetic>
+            <StoreBadge href="#app" />
             <Magnetic>
               <a
                 href="#igy-mukodik"
-                className="glass flex items-center gap-2.5 rounded-full px-7 py-4 text-sm font-semibold text-white/90 transition-colors hover:border-cyan-300/40"
+                className="glass flex items-center gap-2.5 rounded-full px-7 py-4 text-sm font-semibold text-black/80 transition-colors hover:border-cyan-500/50 dark:text-white/90 dark:hover:border-cyan-300/40"
               >
-                <ScanLine size={18} className="text-cyan-300" />
+                <ScanLine size={18} className="text-cyan-600 dark:text-cyan-300" />
                 Hogy működik?
               </a>
             </Magnetic>
@@ -153,10 +147,10 @@ export default function Hero() {
             transition={{ duration: 0.9, ease, delay: 0.9 }}
             className="glass absolute left-0 top-10 hidden animate-float rounded-2xl px-5 py-4 sm:block md:left-10"
           >
-            <p className="text-[11px] tracking-widest text-white/50 uppercase">
+            <p className="text-[11px] tracking-widest text-black/50 uppercase dark:text-white/50">
               Felismerve
             </p>
-            <p className="font-display text-xl font-bold text-cyan-300">
+            <p className="font-display text-xl font-bold text-cyan-700 dark:text-cyan-300">
               Henger · 96%
             </p>
           </motion.div>
@@ -167,11 +161,14 @@ export default function Hero() {
             transition={{ duration: 0.9, ease, delay: 1.05 }}
             className="glass absolute bottom-10 right-0 hidden animate-float rounded-2xl px-5 py-4 [animation-delay:1.2s] sm:block md:right-10"
           >
-            <p className="text-[11px] tracking-widest text-white/50 uppercase">
+            <p className="text-[11px] tracking-widest text-black/50 uppercase dark:text-white/50">
               Térfogat
             </p>
-            <p className="font-display text-xl font-bold">
-              98,2 <span className="text-sm font-medium text-white/50">cm³</span>
+            <p className="font-display text-xl font-bold text-black dark:text-white">
+              98,2{" "}
+              <span className="text-sm font-medium text-black/50 dark:text-white/50">
+                cm³
+              </span>
             </p>
           </motion.div>
 
@@ -181,19 +178,21 @@ export default function Hero() {
             transition={{ duration: 0.9, ease, delay: 1.2 }}
             className="glass absolute bottom-0 left-1/2 hidden -translate-x-1/2 rounded-2xl px-5 py-3 lg:block"
           >
-            <p className="text-xs text-white/60">
+            <p className="text-xs text-black/60 dark:text-white/60">
               Felszín{" "}
-              <span className="font-display font-bold text-white">
+              <span className="font-display font-bold text-black dark:text-white">
                 117,8 cm²
               </span>{" "}
-              <span className="text-cyan-300">✓ egyértelmű</span>
+              <span className="text-cyan-700 dark:text-cyan-300">
+                ✓ egyértelmű
+              </span>
             </p>
           </motion.div>
         </motion.div>
       </motion.div>
 
       {/* marquee */}
-      <div className="relative z-10 border-y border-white/10 bg-black/40 py-4 backdrop-blur">
+      <div className="relative z-10 border-y border-black/10 bg-white/50 py-4 backdrop-blur dark:border-white/10 dark:bg-black/40">
         <div className="flex overflow-hidden">
           <div className="animate-marquee flex shrink-0 items-center gap-8 pr-8 whitespace-nowrap">
             {Array.from({ length: 2 }).flatMap((_, k) =>
@@ -208,9 +207,10 @@ export default function Hero() {
               ].map((w, i) => (
                 <span
                   key={`${k}-${i}`}
-                  className="font-display flex items-center gap-8 text-sm font-semibold tracking-[0.25em] text-white/50"
+                  className="font-display flex items-center gap-8 text-sm font-semibold tracking-[0.25em] text-black/50 dark:text-white/50"
                 >
-                  {w} <span className="text-cyan-300">✦</span>
+                  {w}{" "}
+                  <span className="text-cyan-600 dark:text-cyan-300">✦</span>
                 </span>
               )),
             )}
@@ -222,7 +222,7 @@ export default function Hero() {
         href="#funkciok"
         aria-label="Görgess le"
         style={{ opacity: fade }}
-        className="absolute bottom-24 left-1/2 z-10 hidden -translate-x-1/2 text-white/40 transition-colors hover:text-cyan-300 lg:block"
+        className="absolute bottom-24 left-1/2 z-10 hidden -translate-x-1/2 text-black/40 transition-colors hover:text-cyan-600 lg:block dark:text-white/40 dark:hover:text-cyan-300"
         animate={{ y: [0, 8, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
       >

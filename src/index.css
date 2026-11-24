@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
@@ -18,11 +20,15 @@ html {
 }
 
 body {
-  background: #050607;
-  color: #f4f7f7;
+  background: #eef2f3;
+  color: #0b0e10;
   font-family: var(--font-body);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+.dark body {
+  background: #050607;
+  color: #f4f7f7;
 }
 
 ::selection {
@@ -35,27 +41,42 @@ body {
 }
 
 .text-stroke {
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.75);
+  -webkit-text-stroke: 1.5px rgba(11, 14, 16, 0.8);
   color: transparent;
 }
+.dark .text-stroke {
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.75);
+}
 .text-stroke-cyan {
-  -webkit-text-stroke: 1.5px #22d3ee;
+  -webkit-text-stroke: 1.5px #0e7490;
   color: transparent;
+}
+.dark .text-stroke-cyan {
+  -webkit-text-stroke: 1.5px #22d3ee;
 }
 
 .bg-blueprint {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    linear-gradient(rgba(11, 14, 16, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 14, 16, 0.07) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, black 30%, transparent 75%);
 }
+.dark .bg-blueprint {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+}
 
 .glass {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(11, 14, 16, 0.1);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+}
+.dark .glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @keyframes marquee {
@@ -108,8 +129,11 @@ input[type="range"] {
   appearance: none;
   height: 4px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(11, 14, 16, 0.15);
   outline: none;
+}
+.dark input[type="range"] {
+  background: rgba(255, 255, 255, 0.12);
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;

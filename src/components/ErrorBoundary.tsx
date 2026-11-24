@@ -1,7 +1,7 @@
 import { Component, type ReactNode } from "react";
-import { CrashPage } from "./ErrorPages";
 
-/* Futásidejű render-hiba → 500-as oldal az üres képernyő helyett */
+/* Futásidejű render-hiba → a statikus error/500.html oldalra küld.
+   Az error/ mappa az egyetlen forrása minden hibaoldalnak. */
 export default class ErrorBoundary extends Component<
   { children: ReactNode },
   { crashed: boolean }
@@ -14,12 +14,11 @@ export default class ErrorBoundary extends Component<
 
   componentDidCatch(err: unknown) {
     console.error("[Cubimera] render hiba:", err);
+    window.location.replace("/error/500.html");
   }
 
   render() {
-    if (this.state.crashed) {
-      return <CrashPage onRetry={() => window.location.reload()} />;
-    }
+    if (this.state.crashed) return null;
     return this.props.children;
   }
 }

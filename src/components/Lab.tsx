@@ -35,15 +35,15 @@ export default function Lab() {
     <section id="labor" className="relative scroll-mt-20 py-24 md:py-36">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal>
-          <p className="mb-4 text-xs font-semibold tracking-[0.3em] text-cyan-300 uppercase">
+          <p className="mb-4 text-xs font-semibold tracking-[0.3em] text-cyan-700 uppercase dark:text-cyan-300">
             03 — Labor
           </p>
           <h2 className="font-display max-w-3xl text-4xl font-bold leading-[1.02] tracking-tight md:text-6xl">
             Próbáld ki.
             <br />
-            <span className="text-white/40">Ugyanaz a matek, mint az appban.</span>
+            <span className="text-black/40 dark:text-white/40">Ugyanaz a matek, mint az appban.</span>
           </h2>
-          <p className="mt-5 max-w-xl leading-relaxed text-white/55">
+          <p className="mt-5 max-w-xl leading-relaxed text-black/60 dark:text-white/55">
             Válassz testet, húzd a csúszkákat — a térfogat és a felszín élőben
             számolódik, pontosan azokkal a képletekkel, amiket a Cubimera is
             használ.
@@ -52,7 +52,7 @@ export default function Lab() {
 
         <Reveal delay={0.1}>
           <div className="glass mt-12 overflow-hidden rounded-3xl">
-            <div className="flex flex-wrap gap-2 border-b border-white/8 p-4">
+            <div className="flex flex-wrap gap-2 border-b border-black/10 dark:border-white/8 p-4">
               {SOLIDS.map((s) => (
                 <button
                   key={s.id}
@@ -60,7 +60,7 @@ export default function Lab() {
                   className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${
                     s.id === id
                       ? "bg-cyan-300 text-black shadow-[0_0_24px_rgba(34,211,238,0.45)]"
-                      : "border border-white/10 text-white/60 hover:border-cyan-300/40 hover:text-white"
+                      : "border border-black/15 text-black/60 hover:border-cyan-600/50 hover:text-black dark:border-white/10 dark:text-white/60 dark:hover:border-cyan-300/40 dark:hover:text-white"
                   }`}
                 >
                   {s.name}
@@ -71,7 +71,7 @@ export default function Lab() {
             <div className="grid md:grid-cols-2">
               <div
                 ref={viewerRef}
-                className="relative border-b border-white/8 md:border-b-0 md:border-r"
+                className="relative border-b border-black/10 dark:border-white/8 md:border-b-0 md:border-r"
               >
                 {viewerNear ? (
                   <Suspense fallback={<ViewerFallback />}>
@@ -89,21 +89,21 @@ export default function Lab() {
                     className="flex gap-8 px-6 pb-6"
                   >
                     <div>
-                      <p className="text-[11px] tracking-widest text-white/45 uppercase">
+                      <p className="text-[11px] tracking-widest text-black/50 dark:text-white/45 uppercase">
                         Térfogat
                       </p>
-                      <p className="font-display text-3xl font-bold text-cyan-300">
+                      <p className="font-display text-3xl font-bold text-cyan-700 dark:text-cyan-300">
                         {fmt(V)}{" "}
-                        <span className="text-sm font-medium text-white/40">cm³</span>
+                        <span className="text-sm font-medium text-black/50 dark:text-white/40">cm³</span>
                       </p>
                     </div>
                     <div>
-                      <p className="text-[11px] tracking-widest text-white/45 uppercase">
+                      <p className="text-[11px] tracking-widest text-black/50 dark:text-white/45 uppercase">
                         Felszín
                       </p>
                       <p className="font-display text-3xl font-bold">
                         {fmt(A)}{" "}
-                        <span className="text-sm font-medium text-white/40">cm²</span>
+                        <span className="text-sm font-medium text-black/50 dark:text-white/40">cm²</span>
                       </p>
                     </div>
                   </motion.div>
@@ -112,13 +112,13 @@ export default function Lab() {
 
               <div className="space-y-6 p-6 md:p-8">
                 <p className="font-display text-lg font-bold">
-                  {solid.name} <span className="text-white/35">· cm</span>
+                  {solid.name} <span className="text-black/50 dark:text-white/35">· cm</span>
                 </p>
                 {solid.params.map((p, i) => (
                   <div key={p.key}>
                     <div className="mb-2 flex items-center justify-between text-sm">
-                      <span className="text-white/60">{p.label}</span>
-                      <span className="font-mono font-semibold text-cyan-300">
+                      <span className="text-black/60 dark:text-white/60">{p.label}</span>
+                      <span className="font-mono font-semibold text-cyan-700 dark:text-cyan-300">
                         {vals[i].toFixed(1)}
                       </span>
                     </div>
@@ -137,10 +137,10 @@ export default function Lab() {
                     />
                   </div>
                 ))}
-                <p className="rounded-2xl border border-white/8 bg-white/[0.03] p-4 font-mono text-xs leading-relaxed text-white/40">
+                <p className="rounded-2xl border border-black/10 bg-black/[0.03] p-4 font-mono text-xs leading-relaxed text-black/60 dark:border-white/8 dark:bg-white/[0.03] dark:text-white/40">
                   V ≈ {fmt(V)} cm³ · A ≈ {fmt(A)} cm²
                   <br />
-                  <span className="text-emerald-300/80">
+                  <span className="text-emerald-700 dark:text-emerald-300/80">
                     ✓ egyértelmű — megszerkeszthető
                   </span>
                 </p>
