@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { Box, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "./ui";
@@ -13,6 +13,8 @@ const LINKS = [
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 25 });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -28,6 +30,12 @@ export default function Nav() {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-x-0 top-0 z-50"
     >
+      {/* görgetésjelző hajszálvonal */}
+      <motion.div
+        aria-hidden
+        style={{ scaleX: progress }}
+        className="absolute inset-x-0 top-0 z-[60] h-[2px] origin-left bg-cyan-600 dark:bg-cyan-300"
+      />
       <div
         className={`mx-auto flex max-w-6xl items-center justify-between px-5 transition-all duration-500 ${
           scrolled ? "py-3" : "py-5"
@@ -41,7 +49,7 @@ export default function Nav() {
           }`}
         />
         <a href="#top" className="relative flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl border border-cyan-400/50 bg-cyan-400/10 shadow-[0_0_24px_rgba(34,211,238,0.35)]">
+          <span className="grid h-9 w-9 place-items-center rounded-xl border border-cyan-600/40 bg-cyan-600/10 dark:border-cyan-400/50 dark:bg-cyan-400/10">
             <Box className="h-4.5 w-4.5 text-cyan-700 dark:text-cyan-300" size={18} />
           </span>
           <span className="font-display text-lg font-bold tracking-tight">
@@ -66,7 +74,7 @@ export default function Nav() {
           <ThemeToggle />
           <a
             href="#app"
-            className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] dark:bg-white dark:text-black dark:hover:bg-cyan-300"
+            className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-cyan-900 dark:bg-white dark:text-black dark:hover:bg-cyan-300"
           >
             Letöltöm
           </a>

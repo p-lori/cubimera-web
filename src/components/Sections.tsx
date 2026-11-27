@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import {
   Boxes,
   Camera,
@@ -7,11 +7,10 @@ import {
   Moon,
   Ruler,
   Sigma,
-  Signal,
-  Wifi,
 } from "lucide-react";
-import type { ReactNode } from "react";
-import { CountUp, Reveal, StoreBadge } from "./ui";
+import { useRef, type ReactNode } from "react";
+import { IPhoneSVG, ResultScreen, ScanScreen } from "./PhoneScreens";
+import { CountUp, Reveal, ScrollTilt, StoreBadge } from "./ui";
 
 /* ---------- STAT SÁV ---------- */
 const STATS = [
@@ -55,11 +54,10 @@ function Card({
     <motion.div
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 260, damping: 22 }}
-      className={`group glass relative overflow-hidden rounded-3xl p-7 transition-colors duration-300 hover:border-cyan-500/40 dark:hover:border-cyan-300/30 ${
+      className={`group glass relative overflow-hidden rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-700 dark:hover:border-cyan-300/50 ${
         big ? "md:col-span-2" : ""
       } ${className}`}
     >
-      <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-cyan-400/0 blur-[80px] transition-all duration-500 group-hover:bg-cyan-400/15" />
       {children}
     </motion.div>
   );
@@ -78,9 +76,15 @@ export function Features() {
     <section id="funkciok" className="relative scroll-mt-20 py-24 md:py-36">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal>
-          <p className="mb-4 text-xs font-semibold tracking-[0.3em] text-cyan-700 uppercase dark:text-cyan-300">
-            01 — Funkciók
-          </p>
+          <div className="mb-6 flex items-center gap-4">
+            <p className="text-xs font-semibold tracking-[0.3em] text-cyan-700 uppercase dark:text-cyan-300">
+              01 — Funkciók
+            </p>
+            <span aria-hidden className="h-px flex-1 bg-black/15 dark:bg-white/15" />
+            <span className="font-mono text-[11px] tracking-widest text-black/40 dark:text-white/40">
+              11 TESTCSALÁD
+            </span>
+          </div>
           <h2 className="font-display max-w-3xl text-4xl font-bold leading-[1.02] tracking-tight md:text-6xl">
             Két mód.
             <br />
@@ -90,8 +94,8 @@ export function Features() {
           </h2>
         </Reveal>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-3">
-          <Reveal delay={0.05}>
+        <div className="mt-14 grid gap-4 [perspective:1200px] md:grid-cols-3">
+          <ScrollTilt amount={1}>
             <Card big className="h-full">
               <Icon>
                 <Camera size={20} />
@@ -103,7 +107,7 @@ export function Features() {
                 felszínt. Retikül a közepén, számok a szélén.
               </p>
               <div className="glass mt-6 flex items-center gap-3 rounded-2xl px-4 py-3 font-mono text-sm">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+                <span className="h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
                 <span className="text-black/60 dark:text-white/70">
                   gúla ·{" "}
                   <span className="text-cyan-700 dark:text-cyan-300">94%</span>{" "}
@@ -111,9 +115,9 @@ export function Features() {
                 </span>
               </div>
             </Card>
-          </Reveal>
+          </ScrollTilt>
 
-          <Reveal delay={0.12}>
+          <ScrollTilt amount={0.8}>
             <Card className="h-full">
               <Icon>
                 <Cuboid size={20} />
@@ -124,9 +128,9 @@ export function Features() {
                 ment. Földön vagy kézben, a végén valódi 1:1-es modell.
               </p>
             </Card>
-          </Reveal>
+          </ScrollTilt>
 
-          <Reveal delay={0.05}>
+          <ScrollTilt amount={1}>
             <Card className="h-full">
               <Icon>
                 <Boxes size={20} />
@@ -137,9 +141,9 @@ export function Features() {
                 kúp, csonkakúp, gömb. Mindegyikhez képlet, nem hasraütés.
               </p>
             </Card>
-          </Reveal>
+          </ScrollTilt>
 
-          <Reveal delay={0.12}>
+          <ScrollTilt amount={0.8}>
             <Card className="h-full">
               <Icon>
                 <Sigma size={20} />
@@ -150,9 +154,9 @@ export function Features() {
                 hihetsz a számoknak, és mikor mérj rá még egyet.
               </p>
             </Card>
-          </Reveal>
+          </ScrollTilt>
 
-          <Reveal delay={0.19}>
+          <ScrollTilt amount={0.65}>
             <Card className="h-full">
               <Icon>
                 <History size={20} />
@@ -163,7 +167,7 @@ export function Features() {
                 kedvencek, újramérés egy koppintással.
               </p>
             </Card>
-          </Reveal>
+          </ScrollTilt>
         </div>
 
         <Reveal delay={0.1}>
@@ -208,6 +212,13 @@ const STEPS = [
 ];
 
 export function Steps() {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: gridRef,
+    offset: ["start end", "end start"],
+  });
+  const lineScale = useSpring(scrollYProgress, { stiffness: 90, damping: 25 });
+
   return (
     <section
       id="igy-mukodik"
@@ -215,9 +226,15 @@ export function Steps() {
     >
       <div className="mx-auto max-w-6xl px-5">
         <Reveal>
-          <p className="mb-4 text-xs font-semibold tracking-[0.3em] text-cyan-700 uppercase dark:text-cyan-300">
-            02 — Így működik
-          </p>
+          <div className="mb-6 flex items-center gap-4">
+            <p className="text-xs font-semibold tracking-[0.3em] text-cyan-700 uppercase dark:text-cyan-300">
+              02 — Így működik
+            </p>
+            <span aria-hidden className="h-px flex-1 bg-black/15 dark:bg-white/15" />
+            <span className="font-mono text-[11px] tracking-widest text-black/40 dark:text-white/40">
+              3 LÉPÉS
+            </span>
+          </div>
           <h2 className="font-display max-w-3xl text-4xl font-bold leading-[1.02] tracking-tight md:text-6xl">
             Három lépés.
             <br />
@@ -225,19 +242,26 @@ export function Steps() {
           </h2>
         </Reveal>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-3">
+        <div ref={gridRef} className="mt-14">
+          <motion.div
+            aria-hidden
+            style={{ scaleX: lineScale }}
+            className="mb-6 h-px origin-left bg-cyan-700/60 dark:bg-cyan-300/60"
+          />
+          <div className="grid gap-4 [perspective:1200px] md:grid-cols-3">
           {STEPS.map((s, i) => (
-            <Reveal key={s.n} delay={i * 0.1}>
+            <ScrollTilt key={s.n} amount={1 - i * 0.15}>
               <div className="group relative h-full overflow-hidden rounded-3xl border border-black/10 bg-black/[0.03] p-8 transition-colors duration-300 hover:border-cyan-500/40 dark:border-white/8 dark:bg-white/[0.02] dark:hover:border-cyan-300/30">
                 <span className="font-display text-stroke text-7xl font-bold opacity-40 transition-opacity duration-300 group-hover:opacity-100">
                   {s.n}
                 </span>
                 <h3 className="font-display mt-6 text-2xl font-bold">{s.title}</h3>
                 <p className="mt-3 leading-relaxed text-black/60 dark:text-white/55">{s.text}</p>
-                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-cyan-300 transition-all duration-700 group-hover:w-full" />
+                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-cyan-600 transition-all duration-700 group-hover:w-full dark:bg-cyan-300" />
               </div>
-            </Reveal>
+            </ScrollTilt>
           ))}
+          </div>
         </div>
       </div>
     </section>
@@ -248,12 +272,17 @@ export function Steps() {
 export function AppSection() {
   return (
     <section id="app" className="relative scroll-mt-20 overflow-hidden py-24 md:py-36">
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[140px]" />
       <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 md:grid-cols-2">
         <Reveal>
-          <p className="mb-4 text-xs font-semibold tracking-[0.3em] text-cyan-700 uppercase dark:text-cyan-300">
-            04 — Az app
-          </p>
+          <div className="mb-6 flex items-center gap-4">
+            <p className="text-xs font-semibold tracking-[0.3em] text-cyan-700 uppercase dark:text-cyan-300">
+              04 — Az app
+            </p>
+            <span aria-hidden className="h-px flex-1 bg-black/15 dark:bg-white/15" />
+            <span className="font-mono text-[11px] tracking-widest text-black/40 dark:text-white/40">
+              iOS 17+
+            </span>
+          </div>
           <h2 className="font-display text-4xl font-bold leading-[1.02] tracking-tight md:text-6xl">
             Mérőműszer,
             <br />
@@ -285,107 +314,24 @@ export function AppSection() {
           </div>
         </Reveal>
 
-        {/* telefon mockup — rendes iPhone */}
+        {/* app képernyők rendes iPhone SVG-keretben */}
         <Reveal delay={0.15} className="flex justify-center">
           <motion.div
-            animate={{ y: [0, -12, 0] }}
-            transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-            className="relative"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
+            className="relative flex items-end"
           >
-            {/* oldalsó gombok */}
-            <div className="absolute -left-[2px] top-28 h-7 w-[3px] rounded-l-md bg-[#43484e]" />
-            <div className="absolute -left-[2px] top-40 h-12 w-[3px] rounded-l-md bg-[#43484e]" />
-            <div className="absolute -left-[2px] top-56 h-12 w-[3px] rounded-l-md bg-[#43484e]" />
-            <div className="absolute -right-[2px] top-44 h-16 w-[3px] rounded-r-md bg-[#43484e]" />
-            {/* titán keret */}
-            <div className="w-[280px] rounded-[3.2rem] bg-gradient-to-b from-[#767c84] via-[#22262a] to-[#565b62] p-[11px] shadow-[0_30px_80px_rgba(0,0,0,0.45),0_0_100px_rgba(34,211,238,0.22)]">
-              <div className="overflow-hidden rounded-[2.6rem] bg-black">
-                {/* kijelző */}
-                <div className="relative bg-[#0b0e10]">
-                  {/* Dynamic Island */}
-                  <div className="absolute left-1/2 top-2.5 z-20 h-[25px] w-[95px] -translate-x-1/2 rounded-full bg-black ring-1 ring-white/10" />
-                  {/* státuszsor */}
-                  <div className="flex items-center justify-between px-7 pt-3.5 text-[11px] font-semibold text-white">
-                    <span>9:41</span>
-                    <span className="flex items-center gap-1.5">
-                      <Signal size={12} />
-                      <Wifi size={12} />
-                      <span className="flex h-[11px] w-[22px] items-center rounded-[3px] border border-white/60 p-[1.5px]">
-                        <span className="h-full w-3/4 rounded-[1px] bg-white" />
-                      </span>
-                    </span>
-                  </div>
-                  <div className="space-y-3 p-4">
-                    <div className="flex items-center gap-2.5">
-                      <span className="grid h-9 w-9 place-items-center rounded-xl border border-cyan-400/50 bg-cyan-400/10">
-                        <Cuboid size={16} className="text-cyan-300" />
-                      </span>
-                      <div>
-                        <p className="text-sm font-bold text-white">
-                          Cubimera
-                        </p>
-                        <p className="text-[11px] text-white/45">
-                          Fotó → 3D test → mérés
-                        </p>
-                      </div>
-                    </div>
-                    <div className="relative grid h-44 place-items-center overflow-hidden rounded-2xl border border-cyan-300/25 bg-gradient-to-b from-cyan-400/10 to-transparent">
-                      <div className="cube-scene scale-[0.42]">
-                        <div
-                          className="cube-3d relative"
-                          style={{ width: 220, height: 220 }}
-                        >
-                          {[
-                            "rotateY(0deg) translateZ(110px)",
-                            "rotateY(90deg) translateZ(110px)",
-                            "rotateY(180deg) translateZ(110px)",
-                            "rotateY(-90deg) translateZ(110px)",
-                            "rotateX(90deg) translateZ(110px)",
-                            "rotateX(-90deg) translateZ(110px)",
-                          ].map((tr, i) => (
-                            <div
-                              key={i}
-                              className="cube-face"
-                              style={{ transform: tr }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <span className="absolute left-3 top-3 rounded-full bg-emerald-400/15 px-2.5 py-1 font-mono text-[10px] text-emerald-300">
-                        ● 3D SZKEN
-                      </span>
-                      <span className="absolute bottom-3 right-3 rounded-full bg-black/60 px-2.5 py-1 font-mono text-[10px] text-cyan-300">
-                        24 / 32 kép
-                      </span>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3.5">
-                      <p className="text-[11px] tracking-widest text-white/45 uppercase">
-                        Henger · 96%
-                      </p>
-                      <div className="mt-2 flex gap-4 text-white">
-                        <div>
-                          <p className="font-display text-xl font-bold">98,2</p>
-                          <p className="text-[10px] text-white/45">
-                            cm³ térfogat
-                          </p>
-                        </div>
-                        <div>
-                          <p className="font-display text-xl font-bold">117,8</p>
-                          <p className="text-[10px] text-white/45">
-                            cm² felszín
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="rounded-2xl bg-cyan-300 py-3 text-center text-sm font-bold text-black">
-                      Mentés a könyvtárba
-                    </div>
-                  </div>
-                  {/* home csík + tükröződés */}
-                  <div className="mx-auto mb-2 h-1 w-28 rounded-full bg-white/40" />
-                  <div className="pointer-events-none absolute inset-0 rounded-[2.6rem] bg-gradient-to-br from-white/[0.09] via-transparent to-transparent" />
-                </div>
-              </div>
+            {/* eredményképernyő — kisebb, megdöntve hátul */}
+            <div className="hidden w-[190px] shrink-0 -rotate-6 -mr-8 mb-6 opacity-95 sm:block">
+              <IPhoneSVG>
+                <ResultScreen />
+              </IPhoneSVG>
+            </div>
+            {/* szkenképernyő — fő telefon */}
+            <div className="w-[270px] shrink-0 md:w-[290px]">
+              <IPhoneSVG>
+                <ScanScreen />
+              </IPhoneSVG>
             </div>
           </motion.div>
         </Reveal>

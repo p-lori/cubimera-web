@@ -1,5 +1,12 @@
-import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
-import { Apple, Moon, Sun } from "lucide-react";
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import { Moon, Sun } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
 import { useTheme } from "../lib/theme";
 
@@ -95,7 +102,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
 
   return (
     <button
-      onClick={toggle}
+      onClick={(e) => toggle({ x: e.clientX, y: e.clientY })}
       aria-label={dark ? "Világos mód" : "Sötét mód"}
       title={dark ? "Világos mód" : "Sötét mód"}
       className={`relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border transition-colors duration-300 ${
@@ -117,59 +124,50 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   );
 }
 
-/* Hivatalos stílusú App Store letöltőgomb */
+/* Hivatalos Apple „Download on the App Store" SVG badge */
 export function StoreBadge({ href = "#top" }: { href?: string }) {
   return (
-    <Magnetic>
-      <a
-        href={href}
-        className="flex items-center gap-3 rounded-2xl border border-white/25 bg-black px-5 py-2.5 transition-shadow duration-300 hover:shadow-[0_0_40px_rgba(34,211,238,0.45)]"
-      >
-        <Apple size={30} className="shrink-0 text-white" fill="currentColor" />
-        <span className="text-left leading-tight">
-          <span className="block text-[10px] font-medium tracking-wide text-white/75">
-            Download on the
-          </span>
-          <span className="font-display block text-[22px] font-semibold leading-none text-white">
-            App Store
-          </span>
-        </span>
-      </a>
-    </Magnetic>
+    <a
+      href={href}
+      aria-label="Letöltés az App Store-ból"
+      className="inline-block transition-transform duration-300 hover:scale-[1.04]"
+    >
+      <img
+        src={`${import.meta.env.BASE_URL}app-store-badge.svg`}
+        alt="Download on the App Store"
+        className="h-12 w-auto md:h-14"
+      />
+    </a>
   );
 }
 
-/* Kurzor-glow: cián fény követi az egeret a hero mögött */
-export function CursorGlow({ targetId }: { targetId: string }) {
-  const x = useMotionValue(-600);
-  const y = useMotionValue(-600);
-  const sx = useSpring(x, { stiffness: 60, damping: 20 });
-  const sy = useSpring(y, { stiffness: 60, damping: 20 });
-
-  useEffect(() => {
-    const el = document.getElementById(targetId);
-    if (!el) return;
-    const move = (e: PointerEvent) => {
-      const r = el.getBoundingClientRect();
-      x.set(e.clientX - r.left);
-      y.set(e.clientY - r.top);
-    };
-    el.addEventListener("pointermove", move);
-    return () => el.removeEventListener("pointermove", move);
-  }, [targetId, x, y]);
+/* Görgetés-vezérelt belépés: a kártya a scrollhoz kötve dől a helyére.
+   Nem egyszeri trigger — oda-vissza görgetve is él. */
+export function ScrollTilt({
+  children,
+  className,
+  amount = 1,
+}: {
+  children: ReactNode;
+  className?: string;
+  amount?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "start center"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [72 * amount, 0]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], [8 * amount, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
 
   return (
     <motion.div
-      aria-hidden
-      className="absolute left-0 top-0 h-[500px] w-[500px] rounded-full pointer-events-none"
-      style={{
-        x: sx,
-        y: sy,
-        translateX: "-50%",
-        translateY: "-50%",
-        background:
-          "radial-gradient(circle, rgba(34,211,238,0.14) 0%, transparent 65%)",
-      }}
-    />
+      ref={ref}
+      style={{ y, rotateX, opacity }}
+      className={className}
+    >
+      {children}
+    </motion.div>
   );
 }

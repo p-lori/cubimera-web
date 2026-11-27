@@ -1,7 +1,13 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useVelocity,
+} from "framer-motion";
 import { ArrowDown, ScanLine } from "lucide-react";
 import { useRef } from "react";
-import { CursorGlow, Magnetic, StoreBadge } from "./ui";
+import { Magnetic, StoreBadge } from "./ui";
 
 /* Forgó drótváz-kocka — az app logójának nagy testvére */
 export function WireCube({ size = 220 }: { size?: number }) {
@@ -20,15 +26,6 @@ export function WireCube({ size = 220 }: { size?: number }) {
         {faces.map((tr, i) => (
           <div key={i} className="cube-face" style={{ transform: tr }} />
         ))}
-        {/* belső mag */}
-        <div
-          className="absolute left-1/2 top-1/2 rounded-full bg-cyan-400/80 blur-2xl"
-          style={{
-            width: size * 0.35,
-            height: size * 0.35,
-            transform: "translate(-50%,-50%)",
-          }}
-        />
       </div>
     </div>
   );
@@ -45,6 +42,11 @@ export default function Hero() {
   const yCube = useTransform(scrollYProgress, [0, 1], [0, 160]);
   const yText = useTransform(scrollYProgress, [0, 1], [0, 90]);
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  /* görgetési sebesség → a főcím megdől lendületben */
+  const { scrollY } = useScroll();
+  const velocity = useVelocity(scrollY);
+  const smoothVel = useSpring(velocity, { stiffness: 120, damping: 30 });
+  const skewX = useTransform(smoothVel, [-2500, 2500], [3, -3]);
 
   return (
     <section
@@ -52,10 +54,7 @@ export default function Hero() {
       ref={ref}
       className="bg-blueprint relative flex min-h-screen flex-col overflow-hidden pt-28"
     >
-      {/* fények */}
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-cyan-500/12 blur-[140px]" />
-      <div className="pointer-events-none absolute right-[-200px] top-1/3 h-[400px] w-[400px] rounded-full bg-teal-500/10 blur-[120px]" />
-      <CursorGlow targetId="top" />
+      {/* háttér: csak a rács + szemcse dolgozik, fényfolt nélkül */}
 
       <motion.div
         style={{ y: yText, opacity: fade }}
@@ -67,11 +66,14 @@ export default function Hero() {
           transition={{ duration: 0.8, ease }}
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-cyan-600/30 bg-cyan-600/10 px-4 py-1.5 text-xs font-medium tracking-widest text-cyan-800 uppercase dark:border-cyan-300/30 dark:bg-cyan-300/10 dark:text-cyan-200"
         >
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-300" />
+          <span className="h-1.5 w-1.5 rounded-full bg-cyan-600 dark:bg-cyan-300" />
           Cubimera · iOS · AR + fotó
         </motion.div>
 
-        <h1 className="font-display text-[13.5vw] font-bold leading-[0.92] tracking-tighter sm:text-7xl md:text-8xl lg:text-[7.5rem]">
+        <motion.h1
+          style={{ skewX }}
+          className="font-display text-[13.5vw] font-bold leading-[0.92] tracking-tighter sm:text-7xl md:text-8xl lg:text-[7.5rem]"
+        >
           <span className="block overflow-hidden">
             <motion.span
               className="block"
@@ -92,7 +94,7 @@ export default function Hero() {
               TÉRFOGAT.
             </motion.span>
           </span>
-        </h1>
+        </motion.h1>
 
         <div className="mt-10 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <motion.p
@@ -210,7 +212,7 @@ export default function Hero() {
                   className="font-display flex items-center gap-8 text-sm font-semibold tracking-[0.25em] text-black/50 dark:text-white/50"
                 >
                   {w}{" "}
-                  <span className="text-cyan-600 dark:text-cyan-300">✦</span>
+                  <span className="text-cyan-700 dark:text-cyan-400">+</span>
                 </span>
               )),
             )}

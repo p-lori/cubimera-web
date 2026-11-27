@@ -9,7 +9,7 @@ const SolidViewer = lazy(() => import("./SolidViewer"));
 function ViewerFallback() {
   return (
     <div className="grid h-64 w-full place-items-center md:h-72">
-      <div className="h-24 w-24 animate-pulse rounded-2xl border border-cyan-300/30 bg-cyan-300/5" />
+      <div className="h-24 w-24 rounded-2xl border border-black/15 dark:border-white/15" />
     </div>
   );
 }
@@ -35,9 +35,15 @@ export default function Lab() {
     <section id="labor" className="relative scroll-mt-20 py-24 md:py-36">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal>
-          <p className="mb-4 text-xs font-semibold tracking-[0.3em] text-cyan-700 uppercase dark:text-cyan-300">
-            03 — Labor
-          </p>
+          <div className="mb-6 flex items-center gap-4">
+            <p className="text-xs font-semibold tracking-[0.3em] text-cyan-700 uppercase dark:text-cyan-300">
+              03 — Labor
+            </p>
+            <span aria-hidden className="h-px flex-1 bg-black/15 dark:bg-white/15" />
+            <span className="font-mono text-[11px] tracking-widest text-black/40 dark:text-white/40">
+              INTERAKTÍV
+            </span>
+          </div>
           <h2 className="font-display max-w-3xl text-4xl font-bold leading-[1.02] tracking-tight md:text-6xl">
             Próbáld ki.
             <br />
@@ -59,7 +65,7 @@ export default function Lab() {
                   onClick={() => pick(s.id)}
                   className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${
                     s.id === id
-                      ? "bg-cyan-300 text-black shadow-[0_0_24px_rgba(34,211,238,0.45)]"
+                      ? "bg-cyan-300 text-black"
                       : "border border-black/15 text-black/60 hover:border-cyan-600/50 hover:text-black dark:border-white/10 dark:text-white/60 dark:hover:border-cyan-300/40 dark:hover:text-white"
                   }`}
                 >
